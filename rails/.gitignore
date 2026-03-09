@@ -1,0 +1,8 @@
+log/
+tmp/
+*.sqlite3
+.env
+storage/
+public/packs/
+public/assets/
+.byebug_history

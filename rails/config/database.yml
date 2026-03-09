@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  username: <%= ENV.fetch("DB_USER", "postgres") %>
+  password: <%= ENV.fetch("DB_PASS", "1234") %>
+
+development:
+  <<: *default
+  database: projetos_db
+
+test:
+  <<: *default
+  database: projetos_db_test
+
+production:
+  <<: *default
+  database: projetos_db_production

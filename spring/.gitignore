@@ -1,0 +1,10 @@
+target/
+*.class
+*.jar
+*.war
+.env
+maven.zip
+apache-maven-3.9.6/
+mvnw.cmd
+*.iml
+.idea/

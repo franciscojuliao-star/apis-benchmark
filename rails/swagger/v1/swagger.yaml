@@ -1,0 +1,146 @@
+---
+openapi: "3.0.1"
+info:
+  title: API Projetos
+  version: v1
+  description: API REST para gerenciamento de projetos
+servers:
+  - url: http://localhost:3001
+paths:
+  /projetos:
+    get:
+      summary: Listar todos os projetos
+      tags:
+        - Projetos
+      responses:
+        "200":
+          description: Lista de projetos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Projeto"
+    post:
+      summary: Criar um novo projeto
+      tags:
+        - Projetos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjetoInput"
+      responses:
+        "201":
+          description: Projeto criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Projeto"
+        "422":
+          description: Dados inválidos
+  /projetos/{id}:
+    get:
+      summary: Buscar projeto por ID
+      tags:
+        - Projetos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Projeto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Projeto"
+        "404":
+          description: Projeto não encontrado
+    put:
+      summary: Atualizar projeto por ID
+      tags:
+        - Projetos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjetoInput"
+      responses:
+        "200":
+          description: Projeto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Projeto"
+        "404":
+          description: Projeto não encontrado
+    delete:
+      summary: Deletar projeto por ID
+      tags:
+        - Projetos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Projeto deletado
+        "404":
+          description: Projeto não encontrado
+components:
+  schemas:
+    Projeto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: Sistema de Gestão
+        coordenador:
+          type: string
+          example: Prof. João Silva
+        curso:
+          type: string
+          example: Engenharia de Software
+        ano:
+          type: integer
+          example: 2024
+        status:
+          type: string
+          enum: [ativo, finalizado]
+          example: ativo
+    ProjetoInput:
+      type: object
+      required: [titulo, coordenador, curso, ano]
+      properties:
+        titulo:
+          type: string
+          example: Sistema de Gestão
+        coordenador:
+          type: string
+          example: Prof. João Silva
+        curso:
+          type: string
+          example: Engenharia de Software
+        ano:
+          type: integer
+          example: 2024
+        status:
+          type: string
+          enum: [ativo, finalizado]
+          example: ativo
