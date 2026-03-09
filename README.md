@@ -13,9 +13,11 @@ Quatro APIs REST conectadas ao mesmo banco PostgreSQL (`projetos_db`), criadas p
 
 ## Pré-requisitos
 
-- PostgreSQL rodando em `localhost:5432`
-- Banco `projetos_db` criado
-- Variáveis de ambiente configuradas (ver seção Banco de Dados)
+- PostgreSQL rodando em `localhost:5432` com o banco `projetos_db` criado
+- Python 3.10+
+- Java 17+
+- Node.js 18+
+- Ruby 3.2+ e Bundler
 
 ---
 
@@ -23,7 +25,16 @@ Quatro APIs REST conectadas ao mesmo banco PostgreSQL (`projetos_db`), criadas p
 
 ```bash
 cd fastapi
-venv/Scripts/activate
+
+# Criar e ativar ambiente virtual
+python -m venv venv
+venv/Scripts/activate        # Windows
+# source venv/bin/activate   # Linux/Mac
+
+# Instalar dependências
+pip install -r requirements.txt
+
+# Rodar
 uvicorn main:app --host 0.0.0.0 --port 8005
 ```
 
@@ -36,8 +47,12 @@ uvicorn main:app --host 0.0.0.0 --port 8005
 
 ```bash
 cd spring
+
+# Instalar dependências e rodar
 apache-maven-3.9.6/bin/mvn spring-boot:run
 ```
+
+> O Maven baixa as dependências automaticamente no primeiro run.
 
 - API: http://localhost:8082/projetos
 - Swagger: http://localhost:8082/swagger-ui
@@ -48,6 +63,11 @@ apache-maven-3.9.6/bin/mvn spring-boot:run
 
 ```bash
 cd node
+
+# Instalar dependências
+npm install
+
+# Rodar
 node src/app.js
 ```
 
@@ -60,7 +80,12 @@ node src/app.js
 
 ```bash
 cd rails
-bundle exec rails server -p 3001 -b 0.0.0.0
+
+# Instalar dependências
+bundle install
+
+# Rodar
+rails server -p 3001 -b 0.0.0.0
 ```
 
 - API: http://localhost:3001/projetos
