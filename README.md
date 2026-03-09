@@ -1,8 +1,21 @@
-# APIs REST - Projetos
+# apis-benchmark
 
-Quatro APIs conectadas ao mesmo banco PostgreSQL (`projetos_db`).
+Quatro APIs REST conectadas ao mesmo banco PostgreSQL (`projetos_db`), criadas para comparação de performance via JMeter.
 
-> **Importante:** Por um conflito de rede no Windows (proxy WSL2), o PostgreSQL só responde via IPv6 (`::1`). Todos os projetos já estão configurados para isso.
+| Framework | Linguagem | Porta |
+|-----------|-----------|-------|
+| FastAPI | Python | 8005 |
+| Spring Boot | Java | 8082 |
+| Node.js (Express) | JavaScript | 3000 |
+| Ruby on Rails | Ruby | 3001 |
+
+---
+
+## Pré-requisitos
+
+- PostgreSQL rodando em `localhost:5432`
+- Banco `projetos_db` criado
+- Variáveis de ambiente configuradas (ver seção Banco de Dados)
 
 ---
 
@@ -11,11 +24,23 @@ Quatro APIs conectadas ao mesmo banco PostgreSQL (`projetos_db`).
 ```bash
 cd fastapi
 venv/Scripts/activate
-uvicorn main:app --port 8005 --host 0.0.0.0
+uvicorn main:app --host 0.0.0.0 --port 8005
 ```
 
 - API: http://localhost:8005/projetos/
 - Swagger: http://localhost:8005/docs
+
+---
+
+## Spring Boot (Java) — Porta 8082
+
+```bash
+cd spring
+apache-maven-3.9.6/bin/mvn spring-boot:run
+```
+
+- API: http://localhost:8082/projetos
+- Swagger: http://localhost:8082/swagger-ui
 
 ---
 
@@ -43,19 +68,22 @@ bundle exec rails server -p 3001 -b 0.0.0.0
 
 ---
 
-## Spring Boot (Java) — Porta 8082
+## Banco de Dados
+
+PostgreSQL 18 — configure as variáveis de ambiente antes de subir os projetos:
 
 ```bash
-cd spring
-apache-maven-3.9.6/bin/mvn spring-boot:run
+DB_HOST=localhost   # ou ::1 se usar WSL2
+DB_PORT=5432
+DB_USER=seu_usuario
+DB_PASS=sua_senha
 ```
 
-- API: http://localhost:8082/projetos
-- Swagger: http://localhost:8082/swagger-ui
+> **Windows + WSL2:** o PostgreSQL pode responder apenas via IPv6 (`::1`). Todos os projetos já estão configurados para isso como padrão.
 
 ---
 
-## Monitoramento de Memória (PowerShell)
+## Monitoramento de RAM (PowerShell)
 
 Rode em um PowerShell separado enquanto o JMeter estiver rodando:
 
@@ -86,6 +114,15 @@ while ($true) {
 }
 ```
 
+```powershell
+# Rails
+while ($true) {
+    $mem = (Get-Process -Name ruby -ErrorAction SilentlyContinue | Measure-Object WorkingSet64 -Sum).Sum / 1MB
+    Write-Host "$(Get-Date -Format 'HH:mm:ss') | Rails RAM: $([math]::Round($mem,1)) MB"
+    Start-Sleep -Seconds 2
+}
+```
+
 ---
 
 ## Parar os Servidores (PowerShell)
@@ -96,14 +133,3 @@ Stop-Process -Name java -Force    # Spring Boot
 Stop-Process -Name node -Force    # Node.js
 Stop-Process -Name ruby -Force    # Rails
 ```
-
----
-
-## Banco de Dados
-
-- PostgreSQL 18
-- Host: `::1` (IPv6 localhost)
-- Porta: `5432`
-- Banco: `projetos_db`
-- Usuário: `postgres`
-- Senha: `1234`
